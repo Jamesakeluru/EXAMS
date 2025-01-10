@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GCTU FOCIS Exam Schedule Tracker</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            background: #f8f9fa;
+            font-family: 'Arial', sans-serif;
+        }
+        .exam-card {
+            font-size: larger;
+            box-shadow: 0 4px 8px rgba(28, 21, 56, 0.1);
+            border-radius: 10px;
+            color: black;
+            padding: 20px;
+            margin: 20px 0;
+            background: #89b7e2;
+        }
+        .exam-today {
+            border-left: 5px solid #ff5555;
+            background: #ffeaea;
+        }
+        .countdown {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #df0d0d;
+        }
+        .highlight {
+            color: #007bff;
+            font-weight: bold;
+        }
+        .header {
+            text-align: center;
+            padding: 20px 0;
+            background: linear-gradient(135deg, #141142, #141142);
+            color: white;
+            margin-bottom: 30px;
+        }
+        .logo {
+            width: 100px; /* Adjust the size as needed */
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="https://lms.gctu.edu.gh/pluginfile.php/1/theme_adaptable/logo/1708290469/GCTULogo.png" alt="GCTU Logo" class="logo">
+        <h1>GCTU FOCIS Exam Schedule Tracker</h1>
+        <p>Faculty of Computing and Information Systems, Ghana Communication Technology University</p>
+    </div>
+
+    <div class="container">
+        <div id="countdown" class="countdown"></div>
+        <div id="exam-info"></div>
+    </div>
+
+    <script>
+        const exams = [
+            { date: '2025-01-13T12:00:00', course: 'CSSD 205: Logic in Computer Science', venue: 'C4, C5, C10, C14, C15', lecturer: 'Richard Amankwaah' },
+            { date: '2025-01-16T08:00:00', course: 'CSSD 223: Systems Analysis & Design', venue: 'C1A, C1B, C1C, C4, C5', lecturer: 'Abigail Wiafe; Augustine Danquah Yeboah' },
+            { date: '2025-01-20T08:00:00', course: 'CSSD 201: Data Structures & Algorithms', venue: 'Abeka-AC15, AC4, AC7, AC8, AC14', lecturer: 'Veronica Agblewornu' },
+            { date: '2025-01-21T08:00:00', course: 'CSNS 241: Data Communications', venue: 'C1A, C1B, C1C, C4, C5', lecturer: 'Bernard Appiah-Kubi' },
+            { date: '2025-01-22T16:00:00', course: 'CSSD 203: Microprocessors & Microcontrollers', venue: 'Police Depot', lecturer: 'Keneth Prince Amoah' },
+            { date: '2025-01-23T08:00:00', course: 'CSSD 209: Web Programming & Applications', venue: 'C5, C10, C14, C15, B1, B2', lecturer: 'Joseph Danso' }
+        ];
+
+        function getNextExam() {
+            const now = new Date();
+            return exams.find(exam => new Date(exam.date) > now);
+        }
+
+        function getTimeLeft(examDate) {
+            const now = new Date();
+            const timeDiff = new Date(examDate) - now;
+            const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+            return { days, hours, minutes };
+        }
+
+        function displayCountdown() {
+            const nextExam = getNextExam();
+            if (nextExam) {
+                const timeLeft = getTimeLeft(nextExam.date);
+                document.getElementById('countdown').innerHTML = `
+                    Next Exam: <span class="highlight">${nextExam.course}</span><br>
+                    Time Left: ${timeLeft.days} days, ${timeLeft.hours} hours, ${timeLeft.minutes} minutes
+                `;
+                document.getElementById('exam-info').innerHTML = `
+                    <div class="exam-card">
+                        <h5>${nextExam.course}</h5>
+                        <p><strong>Date:</strong> ${new Date(nextExam.date).toLocaleString()}</p>
+                        <p><strong>Venue:</strong> ${nextExam.venue}</p>
+                        <p><strong>Lecturer:</strong> ${nextExam.lecturer}</p>
+                    </div>
+                `;
+            } else {
+                document.getElementById('countdown').innerHTML = 'No upcoming exams.';
+            }
+        }
+
+        setInterval(displayCountdown, 1000);
+        displayCountdown();
+    </script>
+</body>
+</html>
