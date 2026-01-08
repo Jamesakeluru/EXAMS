@@ -3,109 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GCTU FOCIS Exam Schedule Tracker</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <style>
-        body {
-            background: #f8f9fa;
-            font-family: 'Arial', sans-serif;
-        }
-        .exam-card {
-            font-size: larger;
-            box-shadow: 0 4px 8px rgba(28, 21, 56, 0.1);
-            border-radius: 10px;
-            color: black;
-            padding: 20px;
-            margin: 20px 0;
-            background: #89b7e2;
-        }
-        .exam-today {
-            border-left: 5px solid #ff5555;
-            background: #ffeaea;
-        }
-        .countdown {
-            font-size: 1.5em;
-            margin-bottom: 20px;
-            text-align: center;
-            color: #df0d0d;
-        }
-        .highlight {
-            color: #007bff;
-            font-weight: bold;
-        }
-        .header {
-            text-align: center;
-            padding: 20px 0;
-            background: linear-gradient(135deg, #141142, #141142);
-            color: white;
-            margin-bottom: 30px;
-        }
-        .logo {
-            width: 100px; /* Adjust the size as needed */
-            margin-bottom: 10px;
-        }
-    </style>
+    <title>WhatsApp-Style Chat</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="header">
-        <img src="https://lms.gctu.edu.gh/pluginfile.php/1/theme_adaptable/logo/1708290469/GCTULogo.png" alt="GCTU Logo" class="logo">
-        <h1>GCTU FOCIS Exam Schedule Tracker</h1>
-        <p>Faculty of Computing and Information Systems, Ghana Communication Technology University</p>
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <div class="login-header">
+                <i class="fas fa-comments"></i>
+                <h2>Welcome to ChatApp</h2>
+                <p>Enter your name to start chatting</p>
+            </div>
+            <div class="login-form">
+                <input type="text" id="usernameInput" placeholder="Enter your name" autocomplete="off">
+                <button id="loginBtn">Start Chatting</button>
+            </div>
+            <div class="demo-users">
+                <p>Try these demo users:</p>
+                <div class="demo-buttons">
+                    <button class="demo-user" data-user="Alex">Alex</button>
+                    <button class="demo-user" data-user="Sam">Sam</button>
+                    <button class="demo-user" data-user="Jordan">Jordan</button>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="container">
-        <div id="countdown" class="countdown"></div>
-        <div id="exam-info"></div>
-    </div><br>
+    <!-- Main Chat Container -->
+    <div id="chatContainer" class="hidden">
+        <!-- Top Header -->
+        <div class="chat-header">
+            <div class="user-info">
+                <div class="avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="user-details">
+                    <h2 id="currentUserName">User</h2>
+                    <p id="userStatus">Online</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button class="header-btn" id="logoutBtn" title="Logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </div>
 
+        <!-- Chat Area -->
+        <div class="chat-area" id="chatArea">
+            <!-- Messages will be loaded here -->
+            <div class="welcome-message">
+                <div class="welcome-bubble">
+                    <p>Welcome to the chat! Start a conversation with the other user.</p>
+                    <span class="time">Today</span>
+                </div>
+            </div>
+        </div>
 
-    <script>
-        const exams = [
-            { date: '2025-01-13T12:00:00', course: 'CSSD 205: Logic in Computer Science', venue: 'C4, C5, C10, C14, C15', lecturer: 'Richard Amankwaah' },
-            { date: '2025-01-16T08:00:00', course: 'CSSD 223: Systems Analysis & Design', venue: 'C1A, C1B, C1C, C4, C5', lecturer: 'Abigail Wiafe; Augustine Danquah Yeboah' },
-            { date: '2025-01-20T08:00:00', course: 'CSSD 201: Data Structures & Algorithms', venue: 'Abeka-AC15, AC4, AC7, AC8, AC14', lecturer: 'Veronica Agblewornu' },
-            { date: '2025-01-21T08:00:00', course: 'CSNS 241: Data Communications', venue: 'C1A, C1B, C1C, C4, C5', lecturer: 'Bernard Appiah-Kubi' },
-            { date: '2025-01-22T16:00:00', course: 'CSSD 203: Microprocessors & Microcontrollers', venue: 'Police Depot', lecturer: 'Keneth Prince Amoah' },
-            { date: '2025-01-23T08:00:00', course: 'CSSD 209: Web Programming & Applications', venue: 'C5, C10, C14, C15, B1, B2', lecturer: 'Joseph Danso' }
-        ];
+        <!-- Message Input -->
+        <div class="message-input-container">
+            <div class="input-wrapper">
+                <button class="input-btn" id="emojiBtn">
+                    <i class="far fa-smile"></i>
+                </button>
+                <input type="text" id="messageInput" placeholder="Type a message..." autocomplete="off">
+                <button class="input-btn" id="attachmentBtn">
+                    <i class="fas fa-paperclip"></i>
+                </button>
+                <button class="send-btn" id="sendBtn">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+            <div class="typing-indicator hidden" id="typingIndicator">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </div>
 
-        function getNextExam() {
-            const now = new Date();
-            return exams.find(exam => new Date(exam.date) > now);
-        }
+    <!-- Emoji Picker -->
+    <div id="emojiPicker" class="emoji-picker hidden">
+        <div class="emoji-category">
+            <button class="emoji">😀</button>
+            <button class="emoji">😂</button>
+            <button class="emoji">😊</button>
+            <button class="emoji">❤️</button>
+            <button class="emoji">👍</button>
+            <button class="emoji">🎉</button>
+            <button class="emoji">🔥</button>
+            <button class="emoji">🙏</button>
+        </div>
+    </div>
 
-        function getTimeLeft(examDate) {
-            const now = new Date();
-            const timeDiff = new Date(examDate) - now;
-            const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
-            return { days, hours, minutes };
-        }
-
-        function displayCountdown() {
-            const nextExam = getNextExam();
-            if (nextExam) {
-                const timeLeft = getTimeLeft(nextExam.date);
-                document.getElementById('countdown').innerHTML = `
-                    Next Exam: <span class="highlight">${nextExam.course}</span><br>
-                    Time Left: ${timeLeft.days} days, ${timeLeft.hours} hours, ${timeLeft.minutes} minutes
-                `;
-                document.getElementById('exam-info').innerHTML = `
-                    <div class="exam-card">
-                        <h5>${nextExam.course}</h5>
-                        <p><strong>Date:</strong> ${new Date(nextExam.date).toLocaleString()}</p>
-                        <p><strong>Venue:</strong> ${nextExam.venue}</p>
-                        <p><strong>Lecturer:</strong> ${nextExam.lecturer}</p>
-                    </div>
-                `;
-            } else {
-                document.getElementById('countdown').innerHTML = 'No upcoming exams.';
-            }
-        }
-
-        setInterval(displayCountdown, 1000);
-        displayCountdown();
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
